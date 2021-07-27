@@ -1,0 +1,11 @@
+.contacts-form {
+  border: 2px solid teal;
+  border-radius: 10px;
+  display: inline-block;
+  width: 400px;
+  padding: 20px;
+}
+
+.contacts-form .button {
+  margin-top: 30px;
+}

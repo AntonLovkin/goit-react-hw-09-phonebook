@@ -1,0 +1,23 @@
+.contact-list {
+  width: 400px;
+  border: 3px solid olive;
+  border-radius: 10px;
+  padding: 20px;
+}
+
+.contact-item {
+  margin-bottom: 10px;
+}
+
+.contact-item__button {
+  margin-left: 20px;
+}
+
+.contact-name {
+  font-weight: bold;
+}
+
+.contact-number {
+  font-style: italic;
+  margin-left: 10px;
+}
