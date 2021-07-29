@@ -1,11 +1,8 @@
 import { Switch } from 'react-router-dom';
 import AppBar from './UserMenu/AppBar';
-// import ContactsView from './views/ContactsView';
-// import RegisterView from './views/RegisterView';
-// import LoginView from './views/LoginView';
-import { Component, lazy, Suspense } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import authOperations from './redux/auth/auth-operations';
-import { connect } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import PrivateRoute from './components/PrivateRoute';
 import PublicRoute from './components/PublicRoute';
 
@@ -13,13 +10,22 @@ const ContactsView = lazy(() => import('./views/ContactsView'));
 const RegisterView = lazy(() => import('./views/RegisterView'));
 const LoginView = lazy(() => import('./views/LoginView'));
 
-class App extends Component {
 
-  componentDidMount() {
-    this.props.onGetCurrentUser();
-}
+// const mapDispatchToProps = {
+//   onGetCurrentUser: authOperations.getCurrentUser
+// }
 
-  render() {
+//  componentDidMount() {
+//     this.props.onGetCurrentUser();
+// }
+
+export default function App() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(authOperations.getCurrentUser())
+  }, [dispatch]);
+
     return (
       <>
         <AppBar />
@@ -34,10 +40,3 @@ class App extends Component {
       </>
     );
   }
-}
-  
-const mapDispatchToProps = {
-  onGetCurrentUser: authOperations.getCurrentUser
-}
-
-export default connect(null, mapDispatchToProps)(App);
