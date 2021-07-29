@@ -1,49 +1,63 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { Component, useState } from "react";
+import { connect, useDispatch } from "react-redux";
 import contactsOperations from "../../redux/contacts/contacts-operations";
 import "../base.css";
 import "../Contact-form/contact-form.css";
 
-class ContactForm extends Component {
-  state = {
-    name: "",
-    number: "",
-  };
+// const mapDispatchToProps = (dispatch) => ({
+//   onSubmit: (name, number) =>
+//     dispatch(contactsOperations.addContact(name, number)),
+//   fetchContacts: () => dispatch(contactsOperations.fetchContacts())
+// });
 
-  componentDidMount() {
-    this.props.fetchContacts()
-  }
+// export default connect(null, mapDispatchToProps)(ContactForm);
 
-  handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({
-      [name]: value,
-    });
-  };
+export default function ContactForm() {
+  const [name, setName] = useState('');
+  const [number, setNumber] = useState('');
 
-  handleSubmit = (evt) => {
-    evt.preventDefault();
+  const dispatch = useDispatch();
 
-    const { name, number } = this.state;
+
+  // state = {
+  //   name: "",
+  //   number: "",
+  // };
+
+  // // componentDidMount() {
+  // //   this.props.fetchContacts()
+  // // }
+
+// const handleChange = ({ target }) => {
+//     const { name, value } = target;
+//     this.setState({
+//       [name]: value,
+//     });
+//   };
+
+// const  handleSubmit = (evt) => {
+//     evt.preventDefault();
+
+//     const { name, number } = this.state;
  
-    this.props.onSubmit(name, number);
+//     this.props.onSubmit(name, number);
    
-    this.reset();
+//     this.reset();
+//   };
+
+  const reset = () => {
+    setName('');
+    setNumber('')
   };
 
-  reset = () => {
-    this.setState({ name: "", number: "" });
-  };
-
-  render() {
     return (
-      <form className="contacts-form" onSubmit={this.handleSubmit}>
+      <form className="contacts-form" onSubmit={handleSubmit}>
         <label className="label">
           Name
           <input
             className="input"
-            value={this.state.name}
-            onChange={this.handleChange}
+            value={name}
+            onChange={handleChange}
             placeholder="Name"
             type="text"
             name="name"
@@ -57,8 +71,8 @@ class ContactForm extends Component {
           Number
           <input
             className="input"
-            value={this.state.number}
-            onChange={this.handleChange}
+            value={number}
+            onChange={handleChange}
             type="tel"
             name="number"
             placeholder="Number"
@@ -73,13 +87,4 @@ class ContactForm extends Component {
         </button>
       </form>
     );
-  }
-}
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (name, number) =>
-    dispatch(contactsOperations.addContact(name, number)),
-  fetchContacts: () => dispatch(contactsOperations.fetchContacts())
-});
-
-export default connect(null, mapDispatchToProps)(ContactForm);
+  };
