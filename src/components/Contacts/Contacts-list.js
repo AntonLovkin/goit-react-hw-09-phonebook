@@ -22,17 +22,6 @@ const ContactsList = ({ filteredContacts, onDeleteContact }) => (
   </ul>
 );
 
-// const getFilteredContacts = (allContacts, filter) => {
-  
-//   // const { filter, contacts } = this.state;
-
-//   const normalizedFilter = filter.toLowerCase();
-
-//   return allContacts.filter((contact) =>
-//     contact.name.toLowerCase().includes(normalizedFilter)
-//   );
-// };
-
 const mapStateToProps = (state) => ({
   filteredContacts: contactsSelectors.getFilteredContacts(state),
 });
