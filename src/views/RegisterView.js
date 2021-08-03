@@ -1,6 +1,6 @@
   
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
+import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
 import authOperations from '../redux/auth/auth-operations';
 
 const styles = {
@@ -14,76 +14,86 @@ const styles = {
   },
 };
 
-class RegisterView extends Component {
-  state = {
+// const mapDispatchToProps = {
+//   onRegister: authOperations.register,
+// };
+
+// export default connect(null, mapDispatchToProps)(RegisterView);
+
+export default function RegisterView() {
+  const initialState = {
     name: '',
     email: '',
     password: '',
   };
 
-  handleChange = ({ target: { name, value } }) => {
-    this.setState({ [name]: value });
+  const dispatch = useDispatch();
+  const [state, setState] = useState(initialState);
+  const onRegister = (data) => dispatch(authOperations.register(data));
+
+  const handleChange = ({ target: { name, value } }) => {
+    setState(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  handleSubmit = e => {
+  const handleSubmit = e => {
     e.preventDefault();
 
-    this.props.onRegister(this.state);
+    onRegister(state);
 
-    this.setState({ name: '', email: '', password: '' });
+    setState(prev => ({
+      ...prev,
+      name: '',
+      email: '',
+      password: ''
+    }))
   };
 
-  render() {
-    const { name, email, password } = this.state;
+  const { name, email, password } = state;
 
-    return (
-      <div>
-        <h1>Страница регистрации</h1>
+  return (
+    <div>
+      <h1>Страница регистрации</h1>
 
-        <form
-          onSubmit={this.handleSubmit}
-          style={styles.form}
-          autoComplete="off"
-        >
-          <label style={styles.label}>
-            Имя
-            <input
-              type="text"
-              name="name"
-              value={name}
-              onChange={this.handleChange}
-            />
-          </label>
+      <form
+        onSubmit={handleSubmit}
+        style={styles.form}
+        autoComplete="off"
+      >
+        <label style={styles.label}>
+          Имя
+          <input
+            type="text"
+            name="name"
+            value={name}
+            onChange={handleChange}
+          />
+        </label>
 
-          <label style={styles.label}>
-            Почта
-            <input
-              type="email"
-              name="email"
-              value={email}
-              onChange={this.handleChange}
-            />
-          </label>
+        <label style={styles.label}>
+          Почта
+          <input
+            type="email"
+            name="email"
+            value={email}
+            onChange={handleChange}
+          />
+        </label>
 
-          <label style={styles.label}>
-            Пароль
-            <input
-              type="password"
-              name="password"
-              value={password}
-              onChange={this.handleChange}
-            />
-          </label>
+        <label style={styles.label}>
+          Пароль
+          <input
+            type="password"
+            name="password"
+            value={password}
+            onChange={handleChange}
+          />
+        </label>
 
-          <button type="submit">Зарегистрироваться</button>
-        </form>
-      </div>
-    );
-  }
+        <button type="submit">Зарегистрироваться</button>
+      </form>
+    </div>
+  );
 }
-
-const mapDispatchToProps = {
-  onRegister: authOperations.register,
-};
-
-export default connect(null, mapDispatchToProps)(RegisterView);
