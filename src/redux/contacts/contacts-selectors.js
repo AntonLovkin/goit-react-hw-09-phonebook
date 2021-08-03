@@ -23,4 +23,4 @@ const getFilteredContacts = createSelector(
   );  
     })
 
-export default { getFilter, getFilteredContacts }
+export default { getFilter, getFilteredContacts, getAllContacts }
