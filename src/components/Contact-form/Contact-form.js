@@ -1,49 +1,92 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import contactsOperations from "../../redux/contacts/contacts-operations";
+import contactsSelectors from "../../redux/contacts/contacts-selectors";
 import "../base.css";
 import "../Contact-form/contact-form.css";
 
-class ContactForm extends Component {
-  state = {
+// const mapDispatchToProps = (dispatch) => ({
+//   onSubmit: (name, number) =>
+//     dispatch(contactsOperations.addContact(name, number)),
+//   fetchContacts: () => dispatch(contactsOperations.fetchContacts())
+// });
+
+// export default connect(null, mapDispatchToProps)(ContactForm);
+
+export default function ContactForm () {
+  const initialState = {
     name: "",
     number: "",
   };
 
-  componentDidMount() {
-    this.props.fetchContacts()
-  }
+  // componentDidMount() {
+  //   this.props.fetchContacts()
+  // }
 
-  handleChange = ({ target }) => {
-    const { name, value } = target;
-    this.setState({
-      [name]: value,
-    });
+  const dispatch = useDispatch();
+  const [state, setState] = useState(initialState);
+  const onSubmit = (name, number) => dispatch(contactsOperations.addContact(name, number));
+  
+  // const contacts = useSelector(state => contactsSelectors.getAllContacts(state));
+  const fetchContacts = (name, number) => dispatch(contactsOperations.fetchContacts(name, number));
+
+  const handleChange = ({ target: { name, value } }) => {
+    setState(prev => ({
+      ...prev,
+      [name]: value
+    }));
   };
 
-  handleSubmit = (evt) => {
+  const handleSubmit = (evt) => {
     evt.preventDefault();
 
-    const { name, number } = this.state;
+    const { name, number } = state;
  
-    this.props.onSubmit(name, number);
+    onSubmit(name, number);
    
-    this.reset();
+    reset();
   };
 
-  reset = () => {
-    this.setState({ name: "", number: "" });
+  const reset = () => {
+    setState(prev  => ({ ...prev, name: "", number: "" }));
   };
 
-  render() {
-    return (
-      <form className="contacts-form" onSubmit={this.handleSubmit}>
+  // const addNoRepeatContact = (state, contacts) => {
+  //   const { name, number } = state;
+  //   if (
+  //     contacts.some(
+  //       contacts => contacts.name.toLowerCase() === name.toLowerCase(),
+  //     )
+  //   ) {
+  //     alert(`${name} is already in contacts`);
+  //     return;
+  //   }
+  //   if (contacts.some(contacts => contacts.number === number)) {
+  //     alert(`${number} is already in contacts`);
+  //     return;
+  //   }
+
+  //   onSubmit(state);
+  //   reset();
+  // };
+
+  // const handleSubmit = e => {
+  //   e.preventDefault();
+  //   addNoRepeatContact(state, contacts);
+  // };
+
+  fetchContacts();
+
+  const { name, number } = state;
+
+   return (
+      <form className="contacts-form" onSubmit={handleSubmit}>
         <label className="label">
           Name
           <input
             className="input"
-            value={this.state.name}
-            onChange={this.handleChange}
+            value={name}
+            onChange={handleChange}
             placeholder="Name"
             type="text"
             name="name"
@@ -57,8 +100,8 @@ class ContactForm extends Component {
           Number
           <input
             className="input"
-            value={this.state.number}
-            onChange={this.handleChange}
+            value={number}
+            onChange={handleChange}
             type="tel"
             name="number"
             placeholder="Number"
@@ -73,13 +116,4 @@ class ContactForm extends Component {
         </button>
       </form>
     );
-  }
 }
-
-const mapDispatchToProps = (dispatch) => ({
-  onSubmit: (name, number) =>
-    dispatch(contactsOperations.addContact(name, number)),
-  fetchContacts: () => dispatch(contactsOperations.fetchContacts())
-});
-
-export default connect(null, mapDispatchToProps)(ContactForm);
