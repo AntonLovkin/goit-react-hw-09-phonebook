@@ -18,6 +18,7 @@ export default function ContactsList() {
   const dispatch = useDispatch();
 
   // const onDeleteContact = useEffect((id) => {dispatch(contactsOperations.deleteContact(id))})
+  // const onDeleteContact = (id) => dispatch(contactsOperations.deleteContact(id));
 
   const filteredContacts = useSelector(contactsSelectors.getFilteredContacts);
   
